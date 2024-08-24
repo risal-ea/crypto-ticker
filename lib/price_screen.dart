@@ -33,7 +33,7 @@ class _PriceScreenState extends State<PriceScreen> {
 
   void getData() async {
     CoinData coinData = CoinData();
-    double? price = await coinData.getCoinData();
+    double? price = await coinData.getCoinData(selectedCurrency);
     setState(() {
       cryptoPrice = price;
     });
@@ -68,7 +68,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = ${cryptoPrice!.toStringAsFixed(2)} USD',
+                  '1 BTC = ${cryptoPrice != null ? cryptoPrice!.toStringAsFixed(2) : 'Loading...'} $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -91,6 +91,7 @@ class _PriceScreenState extends State<PriceScreen> {
                   selectedCurrency = currenciesList[selectedIndex];
                 });
                 print(selectedCurrency);
+                getData();
               },
               children:
                   getPickerItems(), // Use getPickerItems to create picker items
