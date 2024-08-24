@@ -1,5 +1,6 @@
 import 'package:crypto_ticker/coin_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class PriceScreen extends StatefulWidget {
   @override
@@ -9,28 +10,32 @@ class PriceScreen extends StatefulWidget {
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = "USD";
 
-  List<DropdownMenuItem<String>> getDropDownItems() {
-    List<DropdownMenuItem<String>> dropDownItems = [];
+  // Method to create a list of Text widgets for CupertinoPicker
+  List<Widget> getPickerItems() {
+    List<Widget> pickerItems = [];
 
-    for (String items in currenciesList) {
-      String currency = items;
-      var newItems = DropdownMenuItem(
-        child: Text(currency),
-        value: currency,
+    for (String currency in currenciesList) {
+      pickerItems.add(
+        Center(
+          child: Text(
+            currency,
+            style: TextStyle(
+              fontSize: 22.0, // Customize the font size if needed
+              color: Colors.white, // Customize the color if needed
+            ),
+          ),
+        ),
       );
-
-      dropDownItems.add(newItems);
     }
-    return dropDownItems;
+    return pickerItems;
   }
 
   @override
   Widget build(BuildContext context) {
-    getDropDownItems();
-
     return Scaffold(
       appBar: AppBar(
         title: Text('🤑 Crypto Ticker'),
+        centerTitle: true,
         backgroundColor: Color(0xFF17153B),
       ),
       body: Column(
@@ -63,15 +68,17 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Color(0xFF17153B),
-            child: DropdownButton<String>(
-              value: selectedCurrency, // Set the current selected value
-              items: getDropDownItems(),
-              onChanged: (value) {
+            child: CupertinoPicker(
+              itemExtent: 32.0,
+              magnification: 1.3,
+              onSelectedItemChanged: (selectedIndex) {
                 setState(() {
-                  selectedCurrency = value!;
+                  selectedCurrency = currenciesList[selectedIndex];
                 });
-                print(value);
+                print(selectedCurrency);
               },
+              children:
+                  getPickerItems(), // Use getPickerItems to create picker items
             ),
           ),
         ],
